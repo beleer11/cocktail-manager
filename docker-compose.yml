@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: payrollsystemdb
+    environment:
+      POSTGRES_DB: payrollsystemdb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5032:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - payroll_network
+
+volumes:
+  postgres_data:
+
+networks:
+  payroll_network:
+    driver: bridge
