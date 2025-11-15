@@ -124,7 +124,6 @@
         </div>
     </div>
 
-    <!-- Loader para edición -->
     <div id="editLoader" class="global-loader" style="display:none;">
         <div class="loader-inner">
             <div class="shaker">
@@ -185,7 +184,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Loader styles */
         .global-loader {
             position: fixed;
             top: 0;

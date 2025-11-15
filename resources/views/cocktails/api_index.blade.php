@@ -169,6 +169,15 @@
 
 @push('styles')
     <style>
+        .d-flex.align-items-center.justify-content-between.mb-3 {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        #filtersForm {
+            row-gap: 12px !important;
+        }
+
         .cocktail-card {
             border-radius: 12px;
             overflow: hidden;
@@ -611,7 +620,7 @@
                             <span class="badge bg-secondary">${escapeHtml(d.strAlcoholic ?? '—')}</span>
                         </div>
                         <p class="card-text text-truncate">${escapeHtml(instr)}</p>
-                        <div class="mt-auto d-flex gap-2">
+                        <div class="mt-auto d-flex gap-2 flex-wrap buttons-container">
                             <button class="btn btn-ghost-save btn-save-cocktail" 
                                 data-id="${d.idDrink}"
                                 data-name="${escapeHtml(d.strDrink)}"
@@ -677,11 +686,9 @@
 
                 showGlobalLoader(true, 'Guardando cóctel...');
 
-                // Extraer ingredientes del data-drink
                 const rawDrink = btn.closest('.cocktail-card').find('.preview-btn').data('drink');
                 const drink = typeof rawDrink === 'string' ? JSON.parse(rawDrink) : rawDrink;
 
-                // Construir string de ingredientes
                 const ingredients = [];
                 for (let i = 1; i <= 15; i++) {
                     const ingredient = drink['strIngredient' + i];
@@ -706,16 +713,14 @@
                         glass: btn.data("glass"),
                         instructions: btn.data("instructions"),
                         thumbnail: btn.data("thumb"),
-                        ingredients: ingredientsString // Agregar ingredientes
+                        ingredients: ingredientsString
                     },
                     success: function(res) {
                         btn.find('.btn-label').html('<i class="bi bi-check-lg"></i> Guardado');
                         btn.addClass('saved');
 
-                        // Ocultar el loader primero para que se vea la alerta
                         showGlobalLoader(false);
 
-                        // Mostrar alerta por más tiempo
                         Swal.fire({
                             icon: 'success',
                             title: '¡Guardado!',
@@ -729,10 +734,8 @@
                             }
                         });
 
-                        // Esperar a que el usuario vea la alerta antes de recargar
                         setTimeout(function() {
                             showGlobalLoader(true, 'Actualizando lista...');
-                            // Recargar la página para actualizar la lista
                             loadPage(true);
                         }, 2500);
                     },
