@@ -1,9 +1,9 @@
 services:
   postgres:
     image: postgres:15
-    container_name: payrollsystemdb
+    container_name: cocktailmanagerdb
     environment:
-      POSTGRES_DB: payrollsystemdb
+      POSTGRES_DB: cocktailmanagerdb
       POSTGRES_USER: root
       POSTGRES_PASSWORD: 123456
     ports:
@@ -12,11 +12,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - payroll_network
+      - cocktail_network
 
 volumes:
   postgres_data:
 
 networks:
-  payroll_network:
+  cocktail_network:
     driver: bridge
