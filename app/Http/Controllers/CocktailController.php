@@ -19,6 +19,12 @@ class CocktailController extends Controller
 
         $col = collect($drinks);
 
+        $savedIds = Cocktail::pluck('cocktail_id')->toArray();
+
+        $col = $col->reject(function ($drink) use ($savedIds) {
+            return in_array($drink['idDrink'], $savedIds);
+        });
+
         $allCategories = $col->pluck('strCategory')->filter()->unique()->values()->all();
         $allAlcoholic  = $col->pluck('strAlcoholic')->filter()->unique()->values()->all();
 
@@ -36,8 +42,14 @@ class CocktailController extends Controller
         }
 
         $items = $col->values();
+
         $total = $items->count();
-        $paginated = $items->slice(($page - 1) * $perPage, $perPage)->values()->all();
+
+        $paginated = $items
+            ->slice(($page - 1) * $perPage, $perPage)
+            ->values()
+            ->all();
+
         $hasMore = ($page * $perPage) < $total;
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -73,6 +85,7 @@ class CocktailController extends Controller
             'ingredients' => 'nullable',
         ]);
 
+        $thumbnailPath = $payload['thumbnail'] ?? null;
 
         $cocktail = Cocktail::updateOrCreate(
             ['cocktail_id' => $payload['cocktail_id']],
@@ -82,21 +95,23 @@ class CocktailController extends Controller
                 'alcoholic' => $payload['alcoholic'] ?? null,
                 'glass' => $payload['glass'] ?? null,
                 'instructions' => $payload['instructions'] ?? null,
-                'thumbnail' => $payload['thumbnail'] ?? null,
+                'thumbnail' => $thumbnailPath,
                 'ingredients' => $payload['ingredients'] ?? null,
             ]
         );
 
-
-        return response()->json(['success' => true, 'cocktail' => $cocktail]);
+        return response()->json([
+            'success' => true,
+            'cocktail' => $cocktail,
+        ]);
     }
 
     public function storedIndex()
     {
         $cocktails = Cocktail::orderBy('created_at', 'desc')->get();
+
         return view('cocktails.stored_index', compact('cocktails'));
     }
-
 
     public function edit(Cocktail $cocktail)
     {
@@ -115,9 +130,11 @@ class CocktailController extends Controller
             'ingredients' => 'nullable',
         ]);
 
-
         $cocktail->update($data);
-        return redirect()->route('cocktails.stored')->with('success', 'Cóctel actualizado');
+
+        return redirect()
+            ->route('cocktails.stored')
+            ->with('success', 'Cóctel actualizado');
     }
 
     public function destroy(Cocktail $cocktail)
