@@ -8,19 +8,57 @@ use Illuminate\Support\Facades\Http;
 
 class CocktailController extends Controller
 {
-    public function __construct()
+    public function indexApi(Request $request)
     {
-        $this->middleware('auth');
-    }
+        $search = $request->get('q', 'a');
+        $page = max(1, (int) $request->get('page', 1));
+        $perPage = 12;
 
-    public function indexApi()
-    {
-        $res = Http::get('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=a');
-        $data = $res->json();
-        $drinks = $data['drinks'] ?? [];
-        return view('cocktails.api_index', compact('drinks'));
-    }
+        $res = Http::get("https://www.thecocktaildb.com/api/json/v1/1/search.php", ['s' => $search]);
+        $drinks = $res->json()['drinks'] ?? [];
 
+        $col = collect($drinks);
+
+        $allCategories = $col->pluck('strCategory')->filter()->unique()->values()->all();
+        $allAlcoholic  = $col->pluck('strAlcoholic')->filter()->unique()->values()->all();
+
+        if ($request->filled('category')) {
+            $col = $col->where('strCategory', $request->get('category'));
+        }
+        if ($request->filled('alcoholic')) {
+            $col = $col->where('strAlcoholic', $request->get('alcoholic'));
+        }
+
+        if ($request->get('sort') === 'name_asc') {
+            $col = $col->sortBy('strDrink');
+        } elseif ($request->get('sort') === 'name_desc') {
+            $col = $col->sortByDesc('strDrink');
+        }
+
+        $items = $col->values();
+        $total = $items->count();
+        $paginated = $items->slice(($page - 1) * $perPage, $perPage)->values()->all();
+        $hasMore = ($page * $perPage) < $total;
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'drinks'   => $paginated,
+                'has_more' => $hasMore,
+                'page'     => $page,
+            ]);
+        }
+
+        return view('cocktails.api_index', [
+            'drinks'        => $paginated,
+            'filters'       => [
+                'categories' => $allCategories,
+                'alcoholic'  => $allAlcoholic,
+            ],
+            'has_more'      => $hasMore,
+            'current_page'  => $page,
+            'search_query'  => $search,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -65,7 +103,6 @@ class CocktailController extends Controller
         return view('cocktails.edit', compact('cocktail'));
     }
 
-
     public function update(Request $request, Cocktail $cocktail)
     {
         $data = $request->validate([
@@ -82,7 +119,6 @@ class CocktailController extends Controller
         $cocktail->update($data);
         return redirect()->route('cocktails.stored')->with('success', 'Cóctel actualizado');
     }
-
 
     public function destroy(Cocktail $cocktail)
     {
