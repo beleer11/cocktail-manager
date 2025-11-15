@@ -1,4 +1,11 @@
 # Prueba Técnica -- Laravel + Consumo de API (TheCocktailDB)
+<img width="1902" height="998" alt="image" src="https://github.com/user-attachments/assets/0e5b608e-ecc6-4322-8cd7-d1956f6ee6ee" />
+
+<img width="1905" height="999" alt="image" src="https://github.com/user-attachments/assets/eed301f5-b7c6-4e97-848d-dca07622d71f" />
+
+<img width="1916" height="985" alt="image" src="https://github.com/user-attachments/assets/409646f7-b34b-4526-a366-4582c560575e" />
+
+<img width="1903" height="992" alt="image" src="https://github.com/user-attachments/assets/b3b714b0-2b35-480f-a8b3-a3cf86d3dc0c" />
 
 Desarrollador: Brahiam Musse\
 Stack: Laravel 11, Blade, Bootstrap, jQuery, SweetAlert2, DataTables
