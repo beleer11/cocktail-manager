@@ -1,4 +1,12 @@
 # Prueba Técnica -- Laravel + Consumo de API (TheCocktailDB)
+<img width="1892" height="994" alt="image" src="https://github.com/user-attachments/assets/84096e0a-94d8-48f4-a6d8-721f1fe166e9" />
+
+<img width="1880" height="975" alt="image" src="https://github.com/user-attachments/assets/a76d81b0-83ed-4335-8a7b-70f9327d7297" />
+
+<img width="1875" height="977" alt="image" src="https://github.com/user-attachments/assets/e4a41d10-8132-4dc9-9291-ab2a3b83a3ce" />
+
+<img width="1886" height="944" alt="image" src="https://github.com/user-attachments/assets/1d878b73-ede1-49b3-af4a-6a6fd2aeb068" />
+
 <img width="1902" height="998" alt="image" src="https://github.com/user-attachments/assets/0e5b608e-ecc6-4322-8cd7-d1956f6ee6ee" />
 
 <img width="1905" height="999" alt="image" src="https://github.com/user-attachments/assets/eed301f5-b7c6-4e97-848d-dca07622d71f" />
